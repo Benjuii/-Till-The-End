@@ -24,7 +24,7 @@ public class GamePanel extends JPanel/**/ implements Runnable/*keeps it running*
     //Set player's default position.
     int playerx = 100;
     int playery = 100;
-    int playerSpeed = 4;
+    int playerSpeed = 5;
         
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // window size
@@ -49,7 +49,7 @@ public class GamePanel extends JPanel/**/ implements Runnable/*keeps it running*
         double drawInterval = nns/fps; // Time between drawing and painting
         double delta = 0;
         long lastTme = System.nanoTime(); //The time before the gamethread starts
-        long crntTme; // Current Time - as in the time now
+        long crntTme = 0; // Current Time - as in the time now
         
         while(gameThread != null){
             
@@ -64,24 +64,28 @@ public class GamePanel extends JPanel/**/ implements Runnable/*keeps it running*
             
                 //DRAW the screen with updated information.
                 repaint(); // == paintComponent()
-                delta = 0;
+                delta--;
             }  
         }
     }
     
     public void update(){
         
-        if(keyH.upPrs == true){
+        if(keyH.upPrs == true){                
             playery -= playerSpeed;
+            keyH.upPrs=false;
         }
-        else if(keyH.dwnPrs == true){
+        if(keyH.dwnPrs == true){
             playery += playerSpeed;
+            keyH.dwnPrs=false;
         }
-        else if(keyH.RPrs == true){
-            playerx += playerSpeed;
-        }
-        else if(keyH.LPrs == true){
+        if(keyH.LPrs == true){
             playerx -= playerSpeed;
+            keyH.LPrs=false;
+        }
+        if(keyH.RPrs == true){
+            playerx += playerSpeed;
+            keyH.RPrs=false;
         } 
     }
 
@@ -99,7 +103,7 @@ public class GamePanel extends JPanel/**/ implements Runnable/*keeps it running*
         g2.fillRect(playerx, playery, tileSize, tileSize);
         //(x, y, width, height)
         g2.dispose();
-        //Dispose of graphics contextand release any system resources that it's using#
+        //Dispose of graphics context and release any system resources that it's using
         // - clears resources at each frame
     }
 }
